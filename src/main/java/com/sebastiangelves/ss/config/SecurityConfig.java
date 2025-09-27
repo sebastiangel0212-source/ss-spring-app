@@ -16,19 +16,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                // Las rutas de autenticación son públicas.
-                .requestMatchers("/api/auth/**").permitAll()
-                // Las rutas de productos requieren autenticación.
-                .requestMatchers("/api/productos/**").authenticated()
-                // Cualquier otra petición también requiere autenticación.
-                .anyRequest().authenticated()
-            );
-        
-        // Esta es la parte que faltaba para construir y retornar la configuración.
-        return http.build();
-    }
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        // --> 1. ASEGÚRATE DE QUE CSRF ESTÉ DESHABILITADO
+        .csrf(csrf -> csrf.disable())
+
+        .authorizeHttpRequests(auth -> auth
+            // --> 2. ASEGÚRATE DE QUE LAS RUTAS SEAN PÚBLICAS (permitAll)
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/productos/**").permitAll() 
+            .anyRequest().authenticated()
+        );
+
+    return http.build();
+}
 }
